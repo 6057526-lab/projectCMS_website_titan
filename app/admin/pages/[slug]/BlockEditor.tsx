@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { updateBlockAction } from "./actions";
 
 // Type for Block based on Prisma schema
+// bullets and meta are JsonValue from Prisma, which can be string[], object, etc.
 export type Block = {
   id: string;
   pageId: string;
@@ -14,8 +15,8 @@ export type Block = {
   subtitle: string | null;
   body: string | null;
   order: number;
-  bullets: string[] | null;
-  meta: any;
+  bullets: any; // JsonValue from Prisma - can be string[], object, null, etc.
+  meta: any; // JsonValue from Prisma
   createdAt: Date;
   updatedAt: Date;
 };
