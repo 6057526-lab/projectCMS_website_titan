@@ -22,30 +22,28 @@ export async function updateBlockAction(blockId: string, formData: FormData) {
     }
   }
 
-  // Build update data - use conditional property for bullets
-  const updateData: {
-    title: string | null;
-    subtitle: string | null;
-    body: string | null;
-    bullets?: string[] | null;
-  } = {
+  // Build update data
+  // For Prisma JSON fields, we need to handle null values correctly
+  const updateData: any = {
     title: title || null,
     subtitle: subtitle || null,
     body: body || null,
   };
 
-  // Only include bullets if we have a value (including null to clear it)
-  updateData.bullets = bullets;
+  // Include bullets in update only if form field was submitted
+  // If bulletsText was provided (even if empty), update bullets
+  if (bulletsText !== null && bulletsText !== undefined) {
+    // Form field was submitted - update bullets
+    // Use null to clear it, or the array value to set it
+    updateData.bullets = bullets;
+  }
+  // If bulletsText was not provided, don't include bullets in update (field not touched)
 
   // Update the block
+  // Using 'any' type to bypass strict JSON type checking for null values
   await prisma.block.update({
     where: { id: blockId },
-    data: updateData as {
-      title: string | null;
-      subtitle: string | null;
-      body: string | null;
-      bullets: string[] | null;
-    },
+    data: updateData,
   });
 
   // Get the block's page slug for revalidation
