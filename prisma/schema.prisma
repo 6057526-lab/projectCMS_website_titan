@@ -1,0 +1,70 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// User role enum - defines user roles in the CMS
+enum UserRole {
+  ADMIN
+  EDITOR
+}
+
+// User model - represents a CMS user
+model User {
+  id             String   @id @default(cuid())
+  email          String   @unique
+  hashedPassword String
+  role           UserRole @default(EDITOR)
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+}
+
+// Page model - represents a page on the website (e.g., "home")
+model Page {
+  id        String   @id @default(cuid())
+  slug      String   @unique
+  title     String
+  blocks    Block[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+// BlockType enum - defines the type of content block
+enum BlockType {
+  HERO
+  INTRO
+  MARKET_SEGMENT
+  LIFECYCLE_STAGE
+  LIFECYCLE_INTRO
+  CAPABILITY
+  WHEELS
+  COMPANY
+  CTA
+}
+
+// Block model - represents a content block on a page
+model Block {
+  id        String    @id @default(cuid())
+  page      Page      @relation(fields: [pageId], references: [id], onDelete: Cascade)
+  pageId    String
+  type      BlockType
+  key       String    // unique key within the page, e.g., "hero", "market_automotive"
+  title     String?
+  subtitle  String?
+  body      String?   // main text / description
+  order     Int       // order on the page
+  bullets   Json?     // array of strings, if the block has bullets
+  meta      Json?     // additional settings, e.g., photo captions, buttons
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+
+  @@unique([pageId, key])
+  @@index([pageId, order])
+}
