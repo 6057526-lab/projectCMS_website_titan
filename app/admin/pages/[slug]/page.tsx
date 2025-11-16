@@ -36,7 +36,7 @@ export default async function PageEditorPage({
             href="/admin/page-list" 
             className="text-blue-600 hover:text-blue-800 text-sm mb-2 inline-block"
           >
-            ← Back to Pages
+            ← Назад к списку страниц
           </Link>
           <h1 className="text-3xl font-bold text-gray-900">{page.title}</h1>
           <p className="mt-1 text-sm text-gray-500">Slug: {page.slug}</p>
@@ -50,7 +50,7 @@ export default async function PageEditorPage({
 
         {page.blocks.length === 0 && (
           <div className="bg-white rounded-lg shadow p-8 text-center text-gray-500">
-            No blocks found for this page.
+            Блоки не найдены для этой страницы.
           </div>
         )}
       </div>

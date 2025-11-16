@@ -22,7 +22,7 @@ export default async function PageListPage() {
   return (
     <div className="space-y-6">
       <div className="flex justify-between items-center">
-        <h1 className="text-3xl font-bold text-gray-900">Pages</h1>
+        <h1 className="text-3xl font-bold text-gray-900">Страницы</h1>
       </div>
 
       <div className="bg-white shadow rounded-lg overflow-hidden">
@@ -30,16 +30,16 @@ export default async function PageListPage() {
           <thead className="bg-gray-50">
             <tr>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Title
+                Название
               </th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Slug
+                Адрес (Slug)
               </th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Last Updated
+                Последнее обновление
               </th>
               <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Actions
+                Действия
               </th>
             </tr>
           </thead>
@@ -60,7 +60,7 @@ export default async function PageListPage() {
                     href={`/admin/pages/${page.slug}`}
                     className="text-blue-600 hover:text-blue-900"
                   >
-                    Edit
+                    Редактировать
                   </Link>
                 </td>
               </tr>
@@ -70,7 +70,7 @@ export default async function PageListPage() {
 
         {pages.length === 0 && (
           <div className="text-center py-12 text-gray-500">
-            No pages found. Run the seed script to create sample data.
+            Страницы не найдены. Запустите seed скрипт для создания тестовых данных.
           </div>
         )}
       </div>

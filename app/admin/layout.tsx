@@ -1,5 +1,6 @@
 import { redirect } from "next/navigation";
 import { cookies, headers } from "next/headers";
+import Link from "next/link";
 import { verifyAuthToken, AUTH_COOKIE_NAME } from "@/lib/auth";
 import LogoutButton from "./LogoutButton";
 
@@ -36,10 +37,18 @@ export default async function AdminLayout({
       <header className="bg-white shadow">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
           <div className="flex items-center space-x-4">
-            <h1 className="text-2xl font-bold text-gray-900">REEMS Admin</h1>
+            <h1 className="text-2xl font-bold text-gray-900">REEMS Админ-панель</h1>
             <span className="text-sm text-gray-600">({user.email})</span>
           </div>
-          <LogoutButton />
+          <div className="flex items-center space-x-4">
+            <Link 
+              href="/admin/help" 
+              className="px-4 py-2 text-sm text-gray-700 hover:text-gray-900 hover:bg-gray-100 rounded transition-colors"
+            >
+              Помощь
+            </Link>
+            <LogoutButton />
+          </div>
         </div>
       </header>
 

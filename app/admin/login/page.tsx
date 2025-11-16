@@ -29,13 +29,13 @@ export default function LoginPage() {
       } else {
         const data = await response.json();
         if (data.error === "invalid_credentials") {
-          setError("Invalid email or password");
+          setError("Неверный email или пароль");
         } else {
-          setError("An error occurred. Please try again.");
+          setError("Произошла ошибка. Пожалуйста, попробуйте снова.");
         }
       }
     } catch (err) {
-      setError("An error occurred. Please try again.");
+      setError("Произошла ошибка. Пожалуйста, попробуйте снова.");
     } finally {
       setIsLoading(false);
     }
@@ -46,10 +46,10 @@ export default function LoginPage() {
       <div className="max-w-md w-full space-y-8">
         <div>
           <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
-            REEMS Admin
+            REEMS Админ-панель
           </h2>
           <p className="mt-2 text-center text-sm text-gray-600">
-            Sign in to access the CMS
+            Войдите для доступа к системе управления контентом
           </p>
         </div>
 
@@ -57,7 +57,7 @@ export default function LoginPage() {
           <div className="space-y-4">
             <div>
               <label htmlFor="email" className="block text-sm font-medium text-gray-700">
-                Email
+                Электронная почта
               </label>
               <input
                 id="email"
@@ -74,7 +74,7 @@ export default function LoginPage() {
 
             <div>
               <label htmlFor="password" className="block text-sm font-medium text-gray-700">
-                Password
+                Пароль
               </label>
               <input
                 id="password"
@@ -101,16 +101,16 @@ export default function LoginPage() {
             disabled={isLoading}
             className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            {isLoading ? "Signing in..." : "Sign in"}
+            {isLoading ? "Вход..." : "Войти"}
           </button>
         </form>
         
         <div className="text-center text-sm text-gray-600">
           <p>
-            Default Admin: <span className="font-semibold">admin@reems.com</span>
+            Администратор по умолчанию: <span className="font-semibold">admin@reems.com</span>
           </p>
           <p>
-            Password: <span className="font-semibold">Admin123!</span>
+            Пароль: <span className="font-semibold">Admin123!</span>
           </p>
         </div>
       </div>

@@ -44,7 +44,7 @@ export default function BlockEditor({ block }: BlockEditorProps) {
     
     try {
       await updateBlockAction(block.id, formData);
-      setSuccessMessage("Block updated successfully!");
+      setSuccessMessage("Блок успешно обновлен!");
       setIsEditing(false);
       
       // Refresh the router to get updated data from server
@@ -54,7 +54,7 @@ export default function BlockEditor({ block }: BlockEditorProps) {
       setTimeout(() => setSuccessMessage(""), 3000);
     } catch (error) {
       console.error("Error updating block:", error);
-      setErrorMessage("Failed to update block. Please try again.");
+      setErrorMessage("Не удалось обновить блок. Пожалуйста, попробуйте снова.");
     } finally {
       setIsSaving(false);
     }
@@ -68,7 +68,7 @@ export default function BlockEditor({ block }: BlockEditorProps) {
             <span className="inline-flex items-center px-2.5 py-0.5 rounded-md text-sm font-medium bg-blue-100 text-blue-800">
               {block.type}
             </span>
-            <span className="text-sm text-gray-500">Key: {block.key}</span>
+            <span className="text-sm text-gray-500">Ключ: {block.key}</span>
           </div>
         </div>
         
@@ -77,7 +77,7 @@ export default function BlockEditor({ block }: BlockEditorProps) {
             onClick={() => setIsEditing(true)}
             className="px-3 py-1 text-sm bg-gray-100 hover:bg-gray-200 rounded transition-colors"
           >
-            Edit
+            Редактировать
           </button>
         )}
       </div>
@@ -98,7 +98,7 @@ export default function BlockEditor({ block }: BlockEditorProps) {
         <form action={handleSubmit} className="space-y-4">
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
-              Title
+              Заголовок
             </label>
             <input
               type="text"
@@ -110,7 +110,7 @@ export default function BlockEditor({ block }: BlockEditorProps) {
 
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
-              Subtitle
+              Подзаголовок
             </label>
             <input
               type="text"
@@ -122,7 +122,7 @@ export default function BlockEditor({ block }: BlockEditorProps) {
 
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
-              Body
+              Текст
             </label>
             <textarea
               name="body"
@@ -134,17 +134,17 @@ export default function BlockEditor({ block }: BlockEditorProps) {
 
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
-              Bullets (one per line)
+              Маркированный список (по одному пункту на строку)
             </label>
             <textarea
               name="bullets"
               rows={6}
               defaultValue={initialBullets}
-              placeholder="Enter each bullet point on a new line"
+              placeholder="Введите каждый пункт списка с новой строки"
               className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 font-mono text-sm"
             />
             <p className="mt-1 text-xs text-gray-500">
-              Each line will become a separate bullet point
+              Каждая строка станет отдельным пунктом списка
             </p>
           </div>
 
@@ -154,7 +154,7 @@ export default function BlockEditor({ block }: BlockEditorProps) {
               disabled={isSaving}
               className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
             >
-              {isSaving ? "Saving..." : "Save"}
+              {isSaving ? "Сохранение..." : "Сохранить"}
             </button>
             <button
               type="button"
@@ -162,7 +162,7 @@ export default function BlockEditor({ block }: BlockEditorProps) {
               disabled={isSaving}
               className="px-4 py-2 bg-gray-200 text-gray-700 rounded hover:bg-gray-300 disabled:opacity-50 transition-colors"
             >
-              Cancel
+              Отмена
             </button>
           </div>
         </form>
@@ -170,28 +170,28 @@ export default function BlockEditor({ block }: BlockEditorProps) {
         <div className="space-y-3 text-sm">
           {block.title && (
             <div>
-              <span className="font-semibold text-gray-700">Title:</span>
+              <span className="font-semibold text-gray-700">Заголовок:</span>
               <p className="mt-1 text-gray-900">{block.title}</p>
             </div>
           )}
           
           {block.subtitle && (
             <div>
-              <span className="font-semibold text-gray-700">Subtitle:</span>
+              <span className="font-semibold text-gray-700">Подзаголовок:</span>
               <p className="mt-1 text-gray-900">{block.subtitle}</p>
             </div>
           )}
           
           {block.body && (
             <div>
-              <span className="font-semibold text-gray-700">Body:</span>
+              <span className="font-semibold text-gray-700">Текст:</span>
               <p className="mt-1 text-gray-900 whitespace-pre-wrap">{block.body}</p>
             </div>
           )}
           
           {block.bullets && Array.isArray(block.bullets) && (block.bullets as string[]).length > 0 && (
             <div>
-              <span className="font-semibold text-gray-700">Bullets:</span>
+              <span className="font-semibold text-gray-700">Маркированный список:</span>
               <ul className="mt-1 list-disc list-inside space-y-1">
                 {(block.bullets as string[]).map((bullet, index) => (
                   <li key={index} className="text-gray-900">{bullet}</li>
