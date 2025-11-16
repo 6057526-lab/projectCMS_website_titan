@@ -1,6 +1,5 @@
 import { redirect } from "next/navigation";
-import { cookies } from "next/headers";
-import { headers } from "next/headers";
+import { cookies, headers } from "next/headers";
 import { verifyAuthToken, AUTH_COOKIE_NAME } from "@/lib/auth";
 import LogoutButton from "./LogoutButton";
 
@@ -9,12 +8,12 @@ export default async function AdminLayout({
 }: {
   children: React.ReactNode;
 }) {
-  // Get current pathname to check if we're on login page
+  // Check if this is the login page by checking headers from middleware
   const headersList = await headers();
-  const pathname = headersList.get("x-pathname") || "";
+  const isLoginPage = headersList.get("x-pathname") === "/admin/login";
   
-  // Skip authentication check for login page - render without layout
-  if (pathname === "/admin/login" || pathname.includes("/admin/login")) {
+  // Skip authentication check for login page
+  if (isLoginPage) {
     return <>{children}</>;
   }
 

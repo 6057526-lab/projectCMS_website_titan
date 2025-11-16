@@ -104,15 +104,6 @@ export default function LoginPage() {
             {isLoading ? "Signing in..." : "Sign in"}
           </button>
         </form>
-        
-        <div className="text-center text-sm text-gray-600">
-          <p>
-            Default Admin: <span className="font-semibold">admin@reems.com</span>
-          </p>
-          <p>
-            Password: <span className="font-semibold">Admin123!</span>
-          </p>
-        </div>
       </div>
     </div>
   );
