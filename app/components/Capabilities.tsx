@@ -1,3 +1,5 @@
+import Image from "next/image";
+
 interface CapabilitiesProps {
   capabilities: {
     title: string;
@@ -5,6 +7,7 @@ interface CapabilitiesProps {
     items: Array<{
       title: string;
       photos: string[];
+      photoUrls?: Array<{ url: string; alt: string }>;
       text: string;
       additionalBullets?: string[];
       additionalText?: string;
@@ -34,29 +37,48 @@ export default function Capabilities({ capabilities }: CapabilitiesProps) {
                 index % 2 === 0 ? "lg:flex-row" : "lg:flex-row-reverse"
               } gap-8 items-center bg-gray-50 rounded-lg p-8 shadow-md`}
             >
-              {/* Photos Placeholder */}
+              {/* Photos */}
               <div className="w-full lg:w-1/2">
-                <div className="bg-gray-200 rounded-lg p-6 min-h-[250px] flex flex-col justify-center">
-                  <h4 className="text-sm font-semibold text-gray-600 mb-3">
-                    Reference images:
-                  </h4>
+                {item.photoUrls && item.photoUrls.length > 0 ? (
                   <div className="grid grid-cols-2 gap-2">
-                    {item.photos.length > 0 ? (
-                      item.photos.map((photo, photoIndex) => (
-                        <div
-                          key={photoIndex}
-                          className="bg-white rounded p-3 text-xs text-gray-700 text-center border border-gray-300"
-                        >
-                          {photo}
-                        </div>
-                      ))
-                    ) : (
-                      <div className="col-span-2 text-center text-gray-500 text-sm">
-                        Images coming soon
+                    {item.photoUrls.map((photo, photoIndex) => (
+                      <div
+                        key={photoIndex}
+                        className="relative aspect-square rounded-lg overflow-hidden border border-gray-300"
+                      >
+                        <Image
+                          src={photo.url}
+                          alt={photo.alt || item.photos[photoIndex] || `Image ${photoIndex + 1}`}
+                          fill
+                          className="object-cover"
+                          sizes="(max-width: 768px) 100vw, 50vw"
+                        />
                       </div>
-                    )}
+                    ))}
                   </div>
-                </div>
+                ) : (
+                  <div className="bg-gray-200 rounded-lg p-6 min-h-[250px] flex flex-col justify-center">
+                    <h4 className="text-sm font-semibold text-gray-600 mb-3">
+                      Reference images:
+                    </h4>
+                    <div className="grid grid-cols-2 gap-2">
+                      {item.photos.length > 0 ? (
+                        item.photos.map((photo, photoIndex) => (
+                          <div
+                            key={photoIndex}
+                            className="bg-white rounded p-3 text-xs text-gray-700 text-center border border-gray-300"
+                          >
+                            {photo}
+                          </div>
+                        ))
+                      ) : (
+                        <div className="col-span-2 text-center text-gray-500 text-sm">
+                          Images coming soon
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                )}
               </div>
 
               {/* Content */}

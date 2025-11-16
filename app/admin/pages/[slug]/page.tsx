@@ -14,11 +14,16 @@ export default async function PageEditorPage({
 }) {
   const { slug } = params;
 
-  // Fetch the page and its blocks
+  // Fetch the page and its blocks with images
   const page = await prisma.page.findUnique({
     where: { slug },
     include: {
       blocks: {
+        include: {
+          images: {
+            orderBy: { createdAt: "asc" },
+          },
+        },
         orderBy: { order: "asc" },
       },
     },

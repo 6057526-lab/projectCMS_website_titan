@@ -10,6 +10,17 @@ type BlockType =
   | "COMPANY"
   | "CTA";
 
+// Define Image type manually (Prisma doesn't export it directly in this version)
+type Image = {
+  id: string;
+  url: string;
+  publicId: string;
+  alt: string | null;
+  blockId: string | null;
+  createdAt: Date;
+  updatedAt: Date;
+};
+
 // Define Block type manually (Prisma doesn't export it directly in this version)
 type Block = {
   id: string;
@@ -22,6 +33,7 @@ type Block = {
   order: number;
   bullets: any;
   meta: any;
+  images?: Image[];
   createdAt: Date;
   updatedAt: Date;
 };
@@ -110,9 +122,16 @@ export function adaptCapabilities(blocks: Block[]) {
     subtitle: headerBlock?.subtitle || "",
     items: itemBlocks.map((block) => {
       const meta = block.meta as any;
+      // Get images from block.images if available, otherwise fall back to meta.photos (descriptions)
+      const blockImages = block.images && block.images.length > 0
+        ? block.images.map((img: Image) => ({ url: img.url, alt: img.alt || "" }))
+        : [];
+      const photoDescriptions = meta?.photos || [];
+      
       return {
         title: block.title || "",
-        photos: meta?.photos || [],
+        photos: photoDescriptions, // Keep for backward compatibility
+        photoUrls: blockImages, // New: actual image URLs from Cloudinary
         text: block.body || "",
         additionalBullets: (block.bullets as string[]) || undefined,
         additionalText: meta?.additionalText || undefined,

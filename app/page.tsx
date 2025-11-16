@@ -20,11 +20,16 @@ export const dynamic = 'force-dynamic';
 export const revalidate = 0;
 
 export default async function Home() {
-  // Fetch page data from database
+  // Fetch page data from database with images
   const page = await prisma.page.findUnique({
     where: { slug: "home" },
     include: {
       blocks: {
+        include: {
+          images: {
+            orderBy: { createdAt: "asc" },
+          },
+        },
         orderBy: { order: "asc" },
       },
     },

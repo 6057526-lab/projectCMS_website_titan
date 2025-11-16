@@ -62,9 +62,24 @@ model Block {
   order     Int       // order on the page
   bullets   Json?     // array of strings, if the block has bullets
   meta      Json?     // additional settings, e.g., photo captions, buttons
+  images    Image[]   // images associated with this block
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
 
   @@unique([pageId, key])
   @@index([pageId, order])
+}
+
+// Image model - represents an uploaded image from Cloudinary
+model Image {
+  id        String   @id @default(cuid())
+  block     Block?   @relation(fields: [blockId], references: [id], onDelete: Cascade)
+  blockId   String?
+  url       String   // Cloudinary secure_url
+  publicId  String   // Cloudinary public_id for deletion/updates
+  alt       String?  // alt text / description
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([blockId])
 }

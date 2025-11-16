@@ -4,6 +4,17 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { updateBlockAction } from "./actions";
 
+// Type for Image based on Prisma schema
+export type Image = {
+  id: string;
+  url: string;
+  publicId: string;
+  alt: string | null;
+  blockId: string | null;
+  createdAt: Date;
+  updatedAt: Date;
+};
+
 // Type for Block based on Prisma schema
 // bullets and meta are JsonValue from Prisma, which can be string[], object, etc.
 export type Block = {
@@ -17,6 +28,7 @@ export type Block = {
   order: number;
   bullets: any; // JsonValue from Prisma - can be string[], object, null, etc.
   meta: any; // JsonValue from Prisma
+  images?: Image[]; // Images associated with this block
   createdAt: Date;
   updatedAt: Date;
 };
@@ -31,11 +43,71 @@ export default function BlockEditor({ block }: BlockEditorProps) {
   const [isSaving, setIsSaving] = useState(false);
   const [successMessage, setSuccessMessage] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
+  const [isUploadingImage, setIsUploadingImage] = useState(false);
+  const [imageUploadError, setImageUploadError] = useState("");
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [imageAlt, setImageAlt] = useState("");
   
   // Parse bullets if they exist
   const initialBullets = block.bullets
     ? (Array.isArray(block.bullets) ? (block.bullets as string[]).join("\n") : "")
     : "";
+
+  // Get images for this block
+  const blockImages = block.images || [];
+
+  const handleImageUpload = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!selectedFile) {
+      setImageUploadError("Пожалуйста, выберите файл");
+      return;
+    }
+
+    setIsUploadingImage(true);
+    setImageUploadError("");
+    setSuccessMessage("");
+
+    try {
+      const formData = new FormData();
+      formData.append("file", selectedFile);
+      formData.append("blockId", block.id);
+      if (imageAlt.trim()) {
+        formData.append("alt", imageAlt.trim());
+      }
+
+      const response = await fetch("/api/admin/upload-image", {
+        method: "POST",
+        body: formData,
+      });
+
+      if (!response.ok) {
+        const data = await response.json();
+        throw new Error(data.error || "Ошибка загрузки изображения");
+      }
+
+      setSuccessMessage("Изображение успешно загружено!");
+      setSelectedFile(null);
+      setImageAlt("");
+      
+      // Reset file input
+      const fileInput = document.getElementById(`file-input-${block.id}`) as HTMLInputElement;
+      if (fileInput) {
+        fileInput.value = "";
+      }
+
+      // Refresh to get updated data
+      router.refresh();
+      
+      setTimeout(() => setSuccessMessage(""), 3000);
+    } catch (error) {
+      console.error("Error uploading image:", error);
+      setImageUploadError(
+        error instanceof Error ? error.message : "Не удалось загрузить изображение. Пожалуйста, попробуйте снова."
+      );
+    } finally {
+      setIsUploadingImage(false);
+    }
+  };
 
   const handleSubmit = async (formData: FormData) => {
     setIsSaving(true);
@@ -201,6 +273,81 @@ export default function BlockEditor({ block }: BlockEditorProps) {
           )}
         </div>
       )}
+
+      {/* Images Section */}
+      <div className="mt-6 pt-6 border-t border-gray-200">
+        <h3 className="text-lg font-semibold text-gray-900 mb-4">Картинки блока</h3>
+        
+        <p className="text-sm text-gray-600 mb-4">
+          Картинки загружаются в облако (Cloudinary). После загрузки они автоматически привязываются к этому блоку.
+        </p>
+
+        {/* Upload Form */}
+        <form onSubmit={handleImageUpload} className="mb-6 space-y-4 p-4 bg-gray-50 rounded-lg">
+          <div>
+            <label htmlFor={`file-input-${block.id}`} className="block text-sm font-medium text-gray-700 mb-1">
+              Выберите изображение (JPEG, PNG, WebP, макс. 5MB)
+            </label>
+            <input
+              id={`file-input-${block.id}`}
+              type="file"
+              accept="image/jpeg,image/jpg,image/png,image/webp"
+              onChange={(e) => setSelectedFile(e.target.files?.[0] || null)}
+              className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
+            />
+          </div>
+
+          <div>
+            <label htmlFor={`alt-input-${block.id}`} className="block text-sm font-medium text-gray-700 mb-1">
+              Описание (alt текст) - необязательно
+            </label>
+            <input
+              id={`alt-input-${block.id}`}
+              type="text"
+              value={imageAlt}
+              onChange={(e) => setImageAlt(e.target.value)}
+              placeholder="Описание изображения"
+              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            />
+          </div>
+
+          {imageUploadError && (
+            <div className="p-3 bg-red-50 border border-red-200 text-red-800 rounded text-sm">
+              {imageUploadError}
+            </div>
+          )}
+
+          <button
+            type="submit"
+            disabled={isUploadingImage || !selectedFile}
+            className="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+          >
+            {isUploadingImage ? "Загрузка..." : "Загрузить изображение"}
+          </button>
+        </form>
+
+        {/* Images List */}
+        {blockImages.length > 0 ? (
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+            {blockImages.map((image) => (
+              <div key={image.id} className="relative group">
+                <div className="aspect-square relative rounded-lg overflow-hidden border border-gray-200">
+                  <img
+                    src={image.url}
+                    alt={image.alt || "Изображение блока"}
+                    className="w-full h-full object-cover"
+                  />
+                </div>
+                {image.alt && (
+                  <p className="mt-2 text-xs text-gray-600 truncate">{image.alt}</p>
+                )}
+              </div>
+            ))}
+          </div>
+        ) : (
+          <p className="text-sm text-gray-500">Картинки не загружены для этого блока.</p>
+        )}
+      </div>
     </div>
   );
 }
