@@ -48,11 +48,11 @@ async function main() {
       key: "intro",
       body: homeContent.intro.text,
       order: order++,
-      bullets: homeContent.intro.bullets,
+      bullets: homeContent.intro.bullets as any,
       meta: {
         ctaButton: homeContent.intro.ctaButton,
       },
-    },
+    } as any,
   });
   console.log("✅ Created INTRO block");
 
@@ -84,8 +84,8 @@ async function main() {
         title: segment.title,
         body: segment.leadText,
         order: order++,
-        bullets: segment.bullets,
-      },
+        bullets: segment.bullets as any,
+      } as any,
     });
     console.log(`✅ Created MARKET_SEGMENT block: ${segment.title}`);
   }
@@ -182,11 +182,11 @@ async function main() {
       subtitle: homeContent.forgedWheels.subtitle,
       body: homeContent.forgedWheels.text,
       order: order++,
-      bullets: homeContent.forgedWheels.bullets,
+      bullets: homeContent.forgedWheels.bullets as any,
       meta: {
         ctaButton: homeContent.forgedWheels.ctaButton,
       },
-    },
+    } as any,
   });
   console.log("✅ Created WHEELS block");
 
