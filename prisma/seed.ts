@@ -147,20 +147,27 @@ async function main() {
   ];
   for (let i = 0; i < homeContent.capabilities.items.length; i++) {
     const item = homeContent.capabilities.items[i];
-    await prisma.block.create({
-      data: {
-        pageId: homePage.id,
-        type: "CAPABILITY",
-        key: `capability_${capabilityKeys[i]}`,
-        title: item.title,
-        body: item.text,
-        order: order++,
-        bullets: item.additionalBullets || null,
-        meta: {
-          photos: item.photos,
-          additionalText: item.additionalText || null,
-        },
+    // Build block data with proper JSON field handling
+    const blockData: any = {
+      pageId: homePage.id,
+      type: "CAPABILITY",
+      key: `capability_${capabilityKeys[i]}`,
+      title: item.title,
+      body: item.text,
+      order: order++,
+      meta: {
+        photos: item.photos,
+        additionalText: item.additionalText || null,
       },
+    };
+    // Conditionally add bullets if they exist
+    if (item.additionalBullets) {
+      blockData.bullets = item.additionalBullets;
+    } else {
+      blockData.bullets = null;
+    }
+    await prisma.block.create({
+      data: blockData,
     });
     console.log(`✅ Created CAPABILITY block: ${item.title}`);
   }
