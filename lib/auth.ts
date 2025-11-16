@@ -14,14 +14,18 @@ export interface AuthTokenPayload {
   [key: string]: unknown;
 }
 
-// JWT Secret key
-const JWT_SECRET = process.env.JWT_SECRET;
-
-if (!JWT_SECRET) {
-  throw new Error("JWT_SECRET environment variable is not set. Please configure it in your .env file.");
+// JWT Secret key - get it lazily to avoid errors during build
+function getJwtSecret(): string {
+  const JWT_SECRET = process.env.JWT_SECRET;
+  if (!JWT_SECRET) {
+    throw new Error("JWT_SECRET environment variable is not set. Please configure it in your .env file.");
+  }
+  return JWT_SECRET;
 }
 
-const secret = new TextEncoder().encode(JWT_SECRET);
+function getSecret(): Uint8Array {
+  return new TextEncoder().encode(getJwtSecret());
+}
 
 // Cookie name for authentication
 export const AUTH_COOKIE_NAME = "reems_auth";
@@ -64,6 +68,7 @@ export async function createAuthToken(user: { id: string; email: string; role: U
     email: user.email,
   };
 
+  const secret = getSecret();
   const token = await new SignJWT(payload)
     .setProtectedHeader({ alg: "HS256" })
     .setIssuedAt()
@@ -80,6 +85,7 @@ export async function createAuthToken(user: { id: string; email: string; role: U
  */
 export async function verifyAuthToken(token: string): Promise<AuthTokenPayload | null> {
   try {
+    const secret = getSecret();
     const { payload } = await jwtVerify(token, secret);
     return payload as AuthTokenPayload;
   } catch (error) {
