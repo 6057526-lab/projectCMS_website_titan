@@ -40,7 +40,7 @@ export default async function PageListPage() {
             </tr>
           </thead>
           <tbody className="bg-white divide-y divide-gray-200">
-            {pages.map((page) => (
+            {pages.map((page: { id: string; slug: string; title: string; updatedAt: Date }) => (
               <tr key={page.id}>
                 <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
                   {page.title}

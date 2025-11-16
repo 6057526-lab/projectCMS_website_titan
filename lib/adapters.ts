@@ -1,4 +1,30 @@
-import { Block, BlockType } from "@prisma/client";
+// Define BlockType enum manually (Prisma doesn't export it directly in this version)
+type BlockType =
+  | "HERO"
+  | "INTRO"
+  | "MARKET_SEGMENT"
+  | "LIFECYCLE_STAGE"
+  | "LIFECYCLE_INTRO"
+  | "CAPABILITY"
+  | "WHEELS"
+  | "COMPANY"
+  | "CTA";
+
+// Define Block type manually (Prisma doesn't export it directly in this version)
+type Block = {
+  id: string;
+  pageId: string;
+  type: BlockType;
+  key: string;
+  title: string | null;
+  subtitle: string | null;
+  body: string | null;
+  order: number;
+  bullets: any;
+  meta: any;
+  createdAt: Date;
+  updatedAt: Date;
+};
 
 // Helper function to find blocks by type
 function findBlocksByType(blocks: Block[], type: BlockType): Block[] {

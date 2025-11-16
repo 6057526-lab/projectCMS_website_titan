@@ -1,14 +1,17 @@
 import { SignJWT, jwtVerify } from "jose";
 import * as bcrypt from "bcryptjs";
 import { prisma } from "./db";
-import { UserRole } from "@prisma/client";
 import { NextRequest } from "next/server";
+
+// Define UserRole manually (Prisma doesn't export it directly in this version)
+type UserRole = "ADMIN" | "EDITOR";
 
 // Auth token payload type
 export interface AuthTokenPayload {
   userId: string;
   role: UserRole;
   email: string;
+  [key: string]: unknown;
 }
 
 // JWT Secret key
@@ -54,10 +57,10 @@ export async function validateUserCredentials(email: string, password: string) {
  * @param user User object
  * @returns JWT token string
  */
-export async function createAuthToken(user: { id: string; email: string; role: UserRole }) {
+export async function createAuthToken(user: { id: string; email: string; role: UserRole | string }) {
   const payload: AuthTokenPayload = {
     userId: user.id,
-    role: user.role,
+    role: user.role as UserRole,
     email: user.email,
   };
 

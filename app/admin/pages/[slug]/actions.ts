@@ -12,20 +12,39 @@ export async function updateBlockAction(blockId: string, formData: FormData) {
   // Parse bullets from textarea (one bullet per line)
   let bullets: string[] | null = null;
   if (bulletsText && bulletsText.trim()) {
-    bullets = bulletsText
+    const parsedBullets = bulletsText
       .split("\n")
       .map((line) => line.trim())
       .filter((line) => line.length > 0);
+    
+    if (parsedBullets.length > 0) {
+      bullets = parsedBullets;
+    }
   }
+
+  // Build update data - use conditional property for bullets
+  const updateData: {
+    title: string | null;
+    subtitle: string | null;
+    body: string | null;
+    bullets?: string[] | null;
+  } = {
+    title: title || null,
+    subtitle: subtitle || null,
+    body: body || null,
+  };
+
+  // Only include bullets if we have a value (including null to clear it)
+  updateData.bullets = bullets;
 
   // Update the block
   await prisma.block.update({
     where: { id: blockId },
-    data: {
-      title: title || null,
-      subtitle: subtitle || null,
-      body: body || null,
-      bullets: bullets,
+    data: updateData as {
+      title: string | null;
+      subtitle: string | null;
+      body: string | null;
+      bullets: string[] | null;
     },
   });
 

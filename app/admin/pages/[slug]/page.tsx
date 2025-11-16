@@ -1,7 +1,7 @@
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import { prisma } from "@/lib/db";
-import BlockEditor from "./BlockEditor";
+import BlockEditor, { type Block } from "./BlockEditor";
 
 export default async function PageEditorPage({
   params,
@@ -40,7 +40,7 @@ export default async function PageEditorPage({
       </div>
 
       <div className="space-y-6">
-        {page.blocks.map((block) => (
+        {page.blocks.map((block: Block) => (
           <BlockEditor key={block.id} block={block} />
         ))}
 

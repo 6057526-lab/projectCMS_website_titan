@@ -2,8 +2,23 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { Block } from "@prisma/client";
 import { updateBlockAction } from "./actions";
+
+// Type for Block based on Prisma schema
+export type Block = {
+  id: string;
+  pageId: string;
+  type: string;
+  key: string;
+  title: string | null;
+  subtitle: string | null;
+  body: string | null;
+  order: number;
+  bullets: string[] | null;
+  meta: any;
+  createdAt: Date;
+  updatedAt: Date;
+};
 
 interface BlockEditorProps {
   block: Block;
