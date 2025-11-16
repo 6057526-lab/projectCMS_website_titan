@@ -3,6 +3,10 @@ import Link from "next/link";
 import { prisma } from "@/lib/db";
 import BlockEditor, { type Block } from "./BlockEditor";
 
+// Force dynamic rendering
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
+
 export default async function PageEditorPage({
   params,
 }: {

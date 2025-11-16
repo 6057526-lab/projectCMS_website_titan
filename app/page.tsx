@@ -15,6 +15,10 @@ import ForgedWheelsSection from "./components/ForgedWheelsSection";
 import CompanySection from "./components/CompanySection";
 import CallToActionSection from "./components/CallToActionSection";
 
+// Force dynamic rendering to avoid build-time database access
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
+
 export default async function Home() {
   // Fetch page data from database
   const page = await prisma.page.findUnique({
