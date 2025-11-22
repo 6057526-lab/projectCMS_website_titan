@@ -143,8 +143,4 @@ function SegmentCard({ segment }: { segment: MarketSegmentsProps['marketSegments
     </div>
   );
 }
-      </div>
-    </section>
-  );
-}
 
