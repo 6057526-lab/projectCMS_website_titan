@@ -1,3 +1,5 @@
+import Image from "next/image";
+
 interface HeroBannerProps {
   hero: {
     headline: string;
@@ -7,6 +9,7 @@ interface HeroBannerProps {
       primary: string;
       secondary: string;
     };
+    images?: Array<{ url: string; alt: string }>;
   };
   intro: {
     text: string;
@@ -17,9 +20,26 @@ interface HeroBannerProps {
 
 export default function HeroBanner({ hero, intro }: HeroBannerProps) {
 
+  // Get first image for background, or use gradient
+  const backgroundImage = hero.images && hero.images.length > 0 ? hero.images[0] : null;
+
   return (
-    <section className="bg-gradient-to-br from-gray-50 to-gray-100 section-padding">
-      <div className="container-custom">
+    <section className="relative bg-gradient-to-br from-gray-50 to-gray-100 section-padding overflow-hidden">
+      {/* Background Image */}
+      {backgroundImage && (
+        <div className="absolute inset-0 z-0">
+          <Image
+            src={backgroundImage.url}
+            alt={backgroundImage.alt}
+            fill
+            className="object-cover opacity-20"
+            priority
+            unoptimized
+          />
+        </div>
+      )}
+      
+      <div className="container-custom relative z-10">
         {/* Main Hero */}
         <div className="text-center max-w-4xl mx-auto mb-16">
           <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 mb-6 leading-tight">

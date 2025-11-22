@@ -60,12 +60,18 @@ export function adaptHeroAndIntro(blocks: Block[]) {
   const heroMeta = heroBlock.meta as any;
   const introMeta = introBlock.meta as any;
 
+  // Get images from hero block
+  const heroImages = heroBlock.images && heroBlock.images.length > 0
+    ? heroBlock.images.map((img: Image) => ({ url: img.url, alt: img.alt || "" }))
+    : [];
+
   return {
     hero: {
       headline: heroBlock.title || "",
       subheadline: heroBlock.subtitle || "",
       description: heroBlock.body || "",
       buttons: heroMeta?.buttons || { primary: "", secondary: "" },
+      images: heroImages,
     },
     intro: {
       text: introBlock.body || "",
