@@ -127,7 +127,7 @@ function ImageSlider({
           src={convertHeicToJpg(images[currentImageIndex].url)}
           alt={images[currentImageIndex].alt || altTexts[currentImageIndex] || `${title} - REEMS ${title.toLowerCase()} capabilities`}
           fill
-          className="object-cover"
+          className={currentImageIndex === 2 ? "object-contain" : "object-cover"}
           sizes="(max-width: 768px) 100vw, 50vw"
           loading="lazy"
         />
