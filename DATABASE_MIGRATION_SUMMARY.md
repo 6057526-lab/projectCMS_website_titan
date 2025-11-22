@@ -317,3 +317,5 @@ npx prisma studio
 **Версия:** 1.0 - Database Integration
 **Дата:** Ноябрь 2024
 
+
+

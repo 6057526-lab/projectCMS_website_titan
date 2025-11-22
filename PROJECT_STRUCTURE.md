@@ -146,3 +146,5 @@ When migrating to a database, the content types in `homeContent.ts` can directly
 - Mobile responsive
 - Tablet optimized
 
+
+
