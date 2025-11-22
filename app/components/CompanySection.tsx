@@ -23,7 +23,7 @@ export default function CompanySection({ company }: CompanySectionProps) {
           </div>
 
           {/* Content */}
-          <div className="bg-white rounded-xl shadow-sm p-6 md:p-12 border border-gray-100">
+          <article className="bg-white rounded-xl shadow-sm p-6 md:p-12 border border-gray-100">
             <div className="prose prose-base lg:prose-lg max-w-none text-gray-700">
               {company.text.split("\n").map((paragraph, index) => (
                 <p key={index} className="leading-relaxed mb-4 last:mb-0">
@@ -39,7 +39,7 @@ export default function CompanySection({ company }: CompanySectionProps) {
               </p>
               <p className="text-base md:text-lg text-center text-gray-600">{company.finalCta}</p>
             </div>
-          </div>
+          </article>
         </div>
       </div>
     </section>

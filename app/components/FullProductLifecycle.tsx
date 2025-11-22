@@ -23,7 +23,7 @@ export default function FullProductLifecycle({ lifecycle }: FullProductLifecycle
         {/* Lifecycle Phases Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8">
           {lifecycle.phases.map((phase, index) => (
-            <div
+            <article
               key={index}
               className="bg-white rounded-lg p-6 lg:p-8 shadow-sm hover:shadow-md transition-shadow duration-300 border border-gray-100"
             >
@@ -34,7 +34,7 @@ export default function FullProductLifecycle({ lifecycle }: FullProductLifecycle
                 <h3 className="text-lg md:text-xl font-bold text-gray-900 mt-1">{phase.title}</h3>
               </div>
               <p className="text-gray-700 leading-relaxed text-base pl-0 md:pl-16">{phase.text}</p>
-            </div>
+            </article>
           ))}
         </div>
       </div>

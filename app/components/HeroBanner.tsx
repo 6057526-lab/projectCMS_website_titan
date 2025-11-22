@@ -33,11 +33,10 @@ export default function HeroBanner({ hero }: HeroBannerProps) {
           <div className="absolute inset-0 z-0">
             <Image
               src={backgroundImage.url}
-              alt={backgroundImage.alt || "Industrial background"}
+              alt={backgroundImage.alt || "REEMS advanced manufacturing facility - magnesium, aluminium and titanium production"}
               fill
               className="object-cover"
               priority
-              unoptimized
               sizes="100vw"
             />
           </div>

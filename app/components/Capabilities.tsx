@@ -44,7 +44,7 @@ export default function Capabilities({ capabilities }: CapabilitiesProps) {
 
         <div className="space-y-12 md:space-y-16">
           {capabilities.items.map((item, index) => (
-            <div
+            <article
               key={index}
               className={`flex flex-col ${
                 index % 2 === 0 ? "lg:flex-row" : "lg:flex-row-reverse"
@@ -89,7 +89,7 @@ export default function Capabilities({ capabilities }: CapabilitiesProps) {
                   </ul>
                 )}
               </div>
-            </div>
+            </article>
           ))}
         </div>
       </div>
@@ -125,11 +125,11 @@ function ImageSlider({
       <div className="relative aspect-[4/3] rounded-lg overflow-hidden border border-gray-200 bg-gray-100 shadow-sm">
         <Image
           src={convertHeicToJpg(images[currentImageIndex].url)}
-          alt={images[currentImageIndex].alt || altTexts[currentImageIndex] || title}
+          alt={images[currentImageIndex].alt || altTexts[currentImageIndex] || `${title} - REEMS ${title.toLowerCase()} capabilities`}
           fill
           className="object-cover"
           sizes="(max-width: 768px) 100vw, 50vw"
-          unoptimized
+          loading="lazy"
         />
         
         {images.length > 1 && (

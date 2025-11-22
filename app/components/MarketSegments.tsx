@@ -69,18 +69,18 @@ function SegmentCard({ segment }: { segment: MarketSegmentsProps['marketSegments
   };
 
   return (
-    <div className="bg-gray-50 rounded-lg p-5 sm:p-6 flex flex-col h-full border border-gray-200">
+    <article className="bg-gray-50 rounded-lg p-5 sm:p-6 flex flex-col h-full border border-gray-200">
       {/* Image Slider */}
       {images.length > 0 && (
         <div className="mb-4 relative group">
           <div className="relative aspect-[4/3] rounded-lg overflow-hidden bg-gray-200">
             <Image
               src={convertHeicToJpg(images[currentImageIndex].url)}
-              alt={images[currentImageIndex].alt || segment.title}
+              alt={images[currentImageIndex].alt || `${segment.title} - REEMS manufacturing solutions`}
               fill
               className="object-cover"
               sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
-              unoptimized
+              loading={currentImageIndex === 0 ? "eager" : "lazy"}
             />
             
             {/* Navigation Arrows - Enhanced for touch */}
@@ -138,6 +138,6 @@ function SegmentCard({ segment }: { segment: MarketSegmentsProps['marketSegments
           </li>
         ))}
       </ul>
-    </div>
+    </article>
   );
 }
