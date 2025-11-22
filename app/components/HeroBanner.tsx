@@ -1,10 +1,11 @@
 import Image from "next/image";
+import Link from "next/link";
 
 interface HeroBannerProps {
   hero: {
     headline: string;
     subheadline: string;
-    description: string;
+    description: string; // We might ignore this to reduce text overload
     buttons: {
       primary: string;
       secondary: string;
@@ -18,82 +19,62 @@ interface HeroBannerProps {
   };
 }
 
-export default function HeroBanner({ hero, intro }: HeroBannerProps) {
-
-  // Get first image for background, or use gradient
+export default function HeroBanner({ hero }: HeroBannerProps) {
+  // Use the first image as the background, fallback to a dark industrial color if missing
   const backgroundImage = hero.images && hero.images.length > 0 ? hero.images[0] : null;
 
   return (
-    <section className="relative bg-gradient-to-br from-gray-50 to-gray-100 section-padding overflow-hidden">
-      {/* Background Image */}
-      {backgroundImage && (
-        <div className="absolute inset-0 z-0">
-          <Image
-            src={backgroundImage.url}
-            alt={backgroundImage.alt}
-            fill
-            className="object-cover opacity-20"
-            priority
-            unoptimized
-          />
-        </div>
+    <section 
+      id="hero" 
+      className="relative w-full h-[85vh] min-h-[600px] max-h-[900px] flex items-center bg-gray-900 overflow-hidden"
+    >
+      {/* Background Image with Dark Overlay */}
+      {backgroundImage ? (
+        <>
+          <div className="absolute inset-0 z-0">
+            <Image
+              src={backgroundImage.url}
+              alt={backgroundImage.alt || "Industrial background"}
+              fill
+              className="object-cover"
+              priority
+              unoptimized // If using external images without optimization config
+            />
+          </div>
+          {/* Industrial Dark Overlay - slightly stronger to ensure text readability */}
+          <div className="absolute inset-0 bg-black/60 z-0" />
+        </>
+      ) : (
+        <div className="absolute inset-0 bg-gradient-to-br from-gray-900 to-gray-800 z-0" />
       )}
-      
-      <div className="container-custom relative z-10">
-        {/* Main Hero */}
-        <div className="text-center max-w-4xl mx-auto mb-16">
-          <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 mb-6 leading-tight">
+
+      <div className="container mx-auto px-4 relative z-10">
+        <div className="max-w-3xl">
+          {/* H1 Headline - Bold, Industrial, Concise */}
+          <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6 tracking-tight leading-tight">
             {hero.headline}
           </h1>
-          <p className="text-xl md:text-2xl text-gray-700 mb-8">{hero.subheadline}</p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center mb-8">
-            <a href="#capabilities" className="btn-primary">
-              {hero.buttons.primary}
-            </a>
-            <a href="#contact" className="btn-secondary">
-              {hero.buttons.secondary}
-            </a>
-          </div>
-          <p className="text-sm md:text-base text-gray-600 max-w-3xl mx-auto">
-            {hero.description}
-          </p>
-        </div>
 
-        {/* Intro Section */}
-        <div className="bg-white rounded-lg shadow-lg p-8 md:p-12 max-w-5xl mx-auto">
-          <div className="grid md:grid-cols-2 gap-8 items-center">
-            <div>
-              <p className="text-lg text-gray-700 leading-relaxed">{intro.text}</p>
-            </div>
-            <div>
-              <ul className="space-y-4">
-                {intro.bullets.map((bullet, index) => (
-                  <li key={index} className="flex items-start">
-                    <svg
-                      className="w-6 h-6 text-primary mr-3 flex-shrink-0 mt-0.5"
-                      fill="none"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                    >
-                      <path d="M5 13l4 4L19 7" />
-                    </svg>
-                    <span className="text-gray-800 font-medium">{bullet}</span>
-                  </li>
-                ))}
-              </ul>
-              <div className="mt-8">
-                <a href="#contact" className="btn-primary w-full sm:w-auto text-center">
-                  {intro.ctaButton}
-                </a>
-              </div>
-            </div>
+          {/* H2 Subheadline - clear and readable */}
+          <p className="text-lg md:text-xl text-gray-200 mb-8 max-w-2xl leading-relaxed opacity-90">
+            {hero.subheadline}
+          </p>
+
+          {/* Single Primary CTA */}
+          <div className="flex flex-col sm:flex-row gap-4">
+            <Link 
+              href="#contact" 
+              className="inline-flex items-center justify-center px-8 py-4 text-base font-semibold text-white bg-primary hover:bg-primary-dark transition-colors duration-200 rounded-md shadow-lg hover:shadow-xl active:transform active:scale-95"
+            >
+              {/* Prefer "Request a quote" style text if possible, defaulting to primary button text or hardcoded fallback if needed for the redesign */}
+              Request a Quote
+            </Link>
           </div>
         </div>
       </div>
+
+      {/* Optional: Industrial accent/decorative element */}
+      <div className="absolute bottom-0 left-0 w-full h-1 bg-gradient-to-r from-primary to-transparent opacity-50" />
     </section>
   );
 }
-
