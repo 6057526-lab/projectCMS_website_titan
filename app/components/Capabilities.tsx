@@ -1,4 +1,7 @@
+"use client";
+
 import Image from "next/image";
+import { useState } from "react";
 
 // Helper function to convert HEIC images to JPG format via Cloudinary
 function convertHeicToJpg(url: string): string {
@@ -58,23 +61,11 @@ export default function Capabilities({ capabilities }: CapabilitiesProps) {
               {/* Photos */}
               <div className="w-full lg:w-1/2">
                 {item.photoUrls && item.photoUrls.length > 0 ? (
-                  <div className="grid grid-cols-2 gap-2">
-                    {item.photoUrls.map((photo, photoIndex) => (
-                      <div
-                        key={photoIndex}
-                        className="relative aspect-square rounded-lg overflow-hidden border border-gray-300"
-                      >
-                        <Image
-                          src={convertHeicToJpg(photo.url)}
-                          alt={photo.alt || item.photos[photoIndex] || `Image ${photoIndex + 1}`}
-                          fill
-                          className="object-cover"
-                          sizes="(max-width: 768px) 100vw, 50vw"
-                          unoptimized
-                        />
-                      </div>
-                    ))}
-                  </div>
+                  <ImageSlider
+                    images={item.photoUrls}
+                    altTexts={item.photos}
+                    title={item.title}
+                  />
                 ) : (
                   <div className="bg-gray-200 rounded-lg p-6 min-h-[250px] flex flex-col justify-center">
                     <h4 className="text-sm font-semibold text-gray-600 mb-3">
@@ -127,6 +118,88 @@ export default function Capabilities({ capabilities }: CapabilitiesProps) {
         </div>
       </div>
     </section>
+  );
+}
+
+// Image Slider Component for Capabilities
+function ImageSlider({
+  images,
+  altTexts,
+  title,
+}: {
+  images: Array<{ url: string; alt: string }>;
+  altTexts: string[];
+  title: string;
+}) {
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+
+  const nextImage = () => {
+    setCurrentImageIndex((prev) => (prev + 1) % images.length);
+  };
+
+  const prevImage = () => {
+    setCurrentImageIndex((prev) => (prev - 1 + images.length) % images.length);
+  };
+
+  const goToImage = (index: number) => {
+    setCurrentImageIndex(index);
+  };
+
+  return (
+    <div className="relative">
+      <div className="relative aspect-[4/3] rounded-lg overflow-hidden border border-gray-300 bg-gray-200">
+        <Image
+          src={convertHeicToJpg(images[currentImageIndex].url)}
+          alt={images[currentImageIndex].alt || altTexts[currentImageIndex] || title}
+          fill
+          className="object-cover"
+          sizes="(max-width: 768px) 100vw, 50vw"
+          unoptimized
+        />
+        
+        {/* Navigation Arrows */}
+        {images.length > 1 && (
+          <>
+            <button
+              onClick={prevImage}
+              className="absolute left-2 top-1/2 -translate-y-1/2 bg-black/50 hover:bg-black/70 text-white rounded-full p-2 transition-all z-10"
+              aria-label="Previous image"
+            >
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+              </svg>
+            </button>
+            <button
+              onClick={nextImage}
+              className="absolute right-2 top-1/2 -translate-y-1/2 bg-black/50 hover:bg-black/70 text-white rounded-full p-2 transition-all z-10"
+              aria-label="Next image"
+            >
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+              </svg>
+            </button>
+          </>
+        )}
+      </div>
+      
+      {/* Dots Indicator */}
+      {images.length > 1 && (
+        <div className="flex justify-center gap-2 mt-3">
+          {images.map((_, index) => (
+            <button
+              key={index}
+              onClick={() => goToImage(index)}
+              className={`h-2 rounded-full transition-all ${
+                index === currentImageIndex
+                  ? 'w-8 bg-primary'
+                  : 'w-2 bg-gray-300 hover:bg-gray-400'
+              }`}
+              aria-label={`Go to image ${index + 1}`}
+            />
+          ))}
+        </div>
+      )}
+    </div>
   );
 }
 
