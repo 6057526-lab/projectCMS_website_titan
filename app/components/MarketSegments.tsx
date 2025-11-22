@@ -1,3 +1,18 @@
+import Image from "next/image";
+
+// Helper function to convert HEIC images to JPG format via Cloudinary
+function convertHeicToJpg(url: string): string {
+  if (url.includes('cloudinary.com') && url.toLowerCase().endsWith('.heic')) {
+    if (url.includes('/upload/')) {
+      const parts = url.split('/upload/');
+      if (parts.length === 2) {
+        return `${parts[0]}/upload/f_jpg/${parts[1]}`;
+      }
+    }
+  }
+  return url;
+}
+
 interface MarketSegmentsProps {
   marketSegments: {
     title: string;
@@ -6,6 +21,7 @@ interface MarketSegmentsProps {
       title: string;
       leadText: string;
       bullets: string[];
+      images?: Array<{ url: string; alt: string }>;
     }>;
   };
 }
@@ -30,6 +46,27 @@ export default function MarketSegments({ marketSegments }: MarketSegmentsProps) 
               key={index}
               className="bg-gray-50 rounded-lg p-6 hover:shadow-lg transition-shadow duration-300 border border-gray-200"
             >
+              {/* Images */}
+              {segment.images && segment.images.length > 0 && (
+                <div className="mb-4 grid grid-cols-2 gap-2">
+                  {segment.images.slice(0, 2).map((img, imgIndex) => (
+                    <div
+                      key={imgIndex}
+                      className="relative aspect-square rounded-lg overflow-hidden border border-gray-300"
+                    >
+                      <Image
+                        src={convertHeicToJpg(img.url)}
+                        alt={img.alt || segment.title}
+                        fill
+                        className="object-cover"
+                        sizes="(max-width: 768px) 50vw, 25vw"
+                        unoptimized
+                      />
+                    </div>
+                  ))}
+                </div>
+              )}
+              
               <h3 className="text-xl font-bold text-primary mb-4">{segment.title}</h3>
               <p className="text-sm text-gray-700 mb-6 leading-relaxed">{segment.leadText}</p>
               <ul className="space-y-2">

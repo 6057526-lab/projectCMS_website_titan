@@ -90,11 +90,19 @@ export function adaptMarketSegments(blocks: Block[]) {
   return {
     title: headerBlock?.title || "Market segments",
     subtitle: headerBlock?.subtitle || "",
-    segments: segmentBlocks.map((block) => ({
-      title: block.title || "",
-      leadText: block.body || "",
-      bullets: (block.bullets as string[]) || [],
-    })),
+    segments: segmentBlocks.map((block) => {
+      // Get images from block
+      const blockImages = block.images && block.images.length > 0
+        ? block.images.map((img: Image) => ({ url: img.url, alt: img.alt || "" }))
+        : [];
+      
+      return {
+        title: block.title || "",
+        leadText: block.body || "",
+        bullets: (block.bullets as string[]) || [],
+        images: blockImages,
+      };
+    }),
   };
 }
 
