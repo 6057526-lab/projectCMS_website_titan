@@ -5,7 +5,7 @@ interface HeroBannerProps {
   hero: {
     headline: string;
     subheadline: string;
-    description: string; // We might ignore this to reduce text overload
+    description: string;
     buttons: {
       primary: string;
       secondary: string;
@@ -20,15 +20,14 @@ interface HeroBannerProps {
 }
 
 export default function HeroBanner({ hero }: HeroBannerProps) {
-  // Use the first image as the background, fallback to a dark industrial color if missing
   const backgroundImage = hero.images && hero.images.length > 0 ? hero.images[0] : null;
 
   return (
     <section 
       id="hero" 
-      className="relative w-full h-[85vh] min-h-[600px] max-h-[900px] flex items-center bg-gray-900 overflow-hidden"
+      className="relative w-full min-h-[100dvh] flex items-center bg-gray-900 overflow-hidden pt-16" // pt-16 to account for fixed header
     >
-      {/* Background Image with Dark Overlay */}
+      {/* Background Image */}
       {backgroundImage ? (
         <>
           <div className="absolute inset-0 z-0">
@@ -38,42 +37,43 @@ export default function HeroBanner({ hero }: HeroBannerProps) {
               fill
               className="object-cover"
               priority
-              unoptimized // If using external images without optimization config
+              unoptimized
+              sizes="100vw"
             />
           </div>
-          {/* Industrial Dark Overlay - slightly stronger to ensure text readability */}
-          <div className="absolute inset-0 bg-black/60 z-0" />
+          {/* Overlay */}
+          <div className="absolute inset-0 bg-black/65 z-0" /> 
         </>
       ) : (
         <div className="absolute inset-0 bg-gradient-to-br from-gray-900 to-gray-800 z-0" />
       )}
 
-      <div className="container mx-auto px-4 relative z-10">
-        <div className="max-w-3xl">
-          {/* H1 Headline - Bold, Industrial, Concise */}
-          <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6 tracking-tight leading-tight">
+      <div className="container-custom relative z-10 w-full">
+        <div className="max-w-4xl mx-auto md:mx-0">
+          {/* Headline: Responsive scaling */}
+          <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6 tracking-tight leading-[1.1]">
             {hero.headline}
           </h1>
 
-          {/* H2 Subheadline - clear and readable */}
-          <p className="text-lg md:text-xl text-gray-200 mb-8 max-w-2xl leading-relaxed opacity-90">
+          {/* Subheadline */}
+          <p className="text-base sm:text-lg md:text-xl text-gray-200 mb-8 max-w-2xl leading-relaxed opacity-90">
             {hero.subheadline}
           </p>
 
-          {/* Single Primary CTA */}
-          <div className="flex flex-col sm:flex-row gap-4">
+          {/* CTA Buttons */}
+          <div className="flex flex-col sm:flex-row gap-4 w-full sm:w-auto">
             <Link 
               href="#contact" 
-              className="inline-flex items-center justify-center px-8 py-4 text-base font-semibold text-white bg-primary hover:bg-primary-dark transition-colors duration-200 rounded-md shadow-lg hover:shadow-xl active:transform active:scale-95"
+              className="inline-flex items-center justify-center px-8 py-4 text-base font-semibold text-white bg-primary hover:bg-primary-dark transition-colors duration-200 rounded-md shadow-lg hover:shadow-xl active:transform active:scale-95 w-full sm:w-auto min-h-[48px]"
             >
-              {/* Prefer "Request a quote" style text if possible, defaulting to primary button text or hardcoded fallback if needed for the redesign */}
               Request a Quote
             </Link>
+            {/* Secondary button logic if needed later, currently keeping single CTA focus for mobile clarity */}
           </div>
         </div>
       </div>
 
-      {/* Optional: Industrial accent/decorative element */}
+      {/* Bottom Accent */}
       <div className="absolute bottom-0 left-0 w-full h-1 bg-gradient-to-r from-primary to-transparent opacity-50" />
     </section>
   );
