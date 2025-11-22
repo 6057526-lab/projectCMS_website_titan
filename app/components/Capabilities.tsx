@@ -1,5 +1,23 @@
 import Image from "next/image";
 
+// Helper function to convert HEIC images to JPG format via Cloudinary
+function convertHeicToJpg(url: string): string {
+  // Check if URL is from Cloudinary and ends with .heic
+  if (url.includes('cloudinary.com') && url.toLowerCase().endsWith('.heic')) {
+    // Insert format transformation before the version or filename
+    // Example: .../upload/v1763800893/.../file.heic
+    // Becomes: .../upload/f_jpg/v1763800893/.../file.heic
+    if (url.includes('/upload/')) {
+      const parts = url.split('/upload/');
+      if (parts.length === 2) {
+        // Add f_jpg transformation to convert HEIC to JPG
+        return `${parts[0]}/upload/f_jpg/${parts[1]}`;
+      }
+    }
+  }
+  return url;
+}
+
 interface CapabilitiesProps {
   capabilities: {
     title: string;
@@ -47,7 +65,7 @@ export default function Capabilities({ capabilities }: CapabilitiesProps) {
                         className="relative aspect-square rounded-lg overflow-hidden border border-gray-300"
                       >
                         <Image
-                          src={photo.url}
+                          src={convertHeicToJpg(photo.url)}
                           alt={photo.alt || item.photos[photoIndex] || `Image ${photoIndex + 1}`}
                           fill
                           className="object-cover"
