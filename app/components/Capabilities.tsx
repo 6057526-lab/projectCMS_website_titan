@@ -52,6 +52,7 @@ export default function Capabilities({ capabilities }: CapabilitiesProps) {
                           fill
                           className="object-cover"
                           sizes="(max-width: 768px) 100vw, 50vw"
+                          unoptimized
                         />
                       </div>
                     ))}
