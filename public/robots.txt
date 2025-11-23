@@ -6,3 +6,5 @@ Disallow: /api/
 # Sitemap location (update with your actual domain)
 Sitemap: https://yourdomain.com/sitemap.xml
 
+
+

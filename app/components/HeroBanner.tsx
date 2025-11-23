@@ -1,5 +1,8 @@
+"use client";
+
 import Image from "next/image";
 import Link from "next/link";
+import { useState, useEffect } from "react";
 
 interface HeroBannerProps {
   hero: {
@@ -20,28 +23,69 @@ interface HeroBannerProps {
 }
 
 export default function HeroBanner({ hero }: HeroBannerProps) {
-  const backgroundImage = hero.images && hero.images.length > 0 ? hero.images[0] : null;
+  const images = hero.images && hero.images.length > 0 ? hero.images : [];
+  const [currentIndex, setCurrentIndex] = useState(0);
+
+  // Auto-rotate images every 5 seconds
+  useEffect(() => {
+    if (images.length <= 1) return;
+
+    const interval = setInterval(() => {
+      setCurrentIndex((prev) => (prev + 1) % images.length);
+    }, 5000); // Change image every 5 seconds
+
+    return () => clearInterval(interval);
+  }, [images.length]);
+
+  const hasImages = images.length > 0;
 
   return (
     <section 
       id="hero" 
       className="relative w-full min-h-[100dvh] flex items-center bg-gray-900 overflow-hidden pt-16" // pt-16 to account for fixed header
     >
-      {/* Background Image */}
-      {backgroundImage ? (
+      {/* Background Images with Fade Transition */}
+      {hasImages ? (
         <>
           <div className="absolute inset-0 z-0">
-            <Image
-              src={backgroundImage.url}
-              alt={backgroundImage.alt || "REEMS advanced manufacturing facility - magnesium, aluminium and titanium production"}
-              fill
-              className="object-cover"
-              priority
-              sizes="100vw"
-            />
+            {images.map((image, index) => (
+              <div
+                key={index}
+                className={`absolute inset-0 transition-opacity duration-1000 ease-in-out ${
+                  index === currentIndex ? "opacity-100" : "opacity-0"
+                }`}
+              >
+                <Image
+                  src={image.url}
+                  alt={image.alt || "REEMS advanced manufacturing facility - magnesium, aluminium and titanium production"}
+                  fill
+                  className="object-cover"
+                  priority={index === 0}
+                  sizes="100vw"
+                />
+              </div>
+            ))}
           </div>
           {/* Overlay */}
-          <div className="absolute inset-0 bg-black/65 z-0" /> 
+          <div className="absolute inset-0 bg-black/65 z-0" />
+          
+          {/* Image Indicators (dots) */}
+          {images.length > 1 && (
+            <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 z-20 flex gap-2">
+              {images.map((_, index) => (
+                <button
+                  key={index}
+                  onClick={() => setCurrentIndex(index)}
+                  className={`h-2 rounded-full transition-all duration-300 ${
+                    index === currentIndex
+                      ? "w-8 bg-primary"
+                      : "w-2 bg-white/50 hover:bg-white/75"
+                  }`}
+                  aria-label={`Go to image ${index + 1}`}
+                />
+              ))}
+            </div>
+          )}
         </>
       ) : (
         <div className="absolute inset-0 bg-gradient-to-br from-gray-900 to-gray-800 z-0" />
