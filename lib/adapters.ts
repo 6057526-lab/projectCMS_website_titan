@@ -60,9 +60,11 @@ export function adaptHeroAndIntro(blocks: Block[]) {
   const heroMeta = heroBlock.meta as any;
   const introMeta = introBlock.meta as any;
 
-  // Get images from hero block
+  // Get images from hero block (exclude third image so it does not show in the slider)
   const heroImages = heroBlock.images && heroBlock.images.length > 0
-    ? heroBlock.images.map((img: Image) => ({ url: img.url, alt: img.alt || "" }))
+    ? heroBlock.images
+        .filter((_, index) => index !== 2)
+        .map((img: Image) => ({ url: img.url, alt: img.alt || "" }))
     : [];
 
   return {
