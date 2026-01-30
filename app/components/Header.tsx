@@ -51,7 +51,7 @@ export default function Header() {
   return (
     <header 
       className={`fixed top-0 w-full z-50 transition-all duration-300 ${
-        scrolled || mobileMenuOpen ? "bg-white shadow-md py-2" : "bg-white/95 backdrop-blur-sm py-3 md:py-4 shadow-sm"
+        scrolled || mobileMenuOpen ? "bg-gray-900 shadow-md py-2" : "bg-gray-900/95 backdrop-blur-sm py-3 md:py-4 shadow-sm"
       }`}
     >
       <nav className="container-custom">
@@ -63,7 +63,7 @@ export default function Header() {
             onClick={() => setMobileMenuOpen(false)}
           >
             <img
-              src="/reems_logo_black.svg"
+              src="/reems_logo_white.svg"
               alt="REEMS"
               className="h-8 w-auto md:h-9"
             />
@@ -75,7 +75,7 @@ export default function Header() {
               <a
                 key={item.href}
                 href={item.href}
-                className="text-gray-700 hover:text-primary transition-colors duration-200 font-medium text-sm lg:text-base"
+                className="text-gray-200 hover:text-white transition-colors duration-200 font-medium text-sm lg:text-base"
               >
                 {item.label}
               </a>
@@ -84,7 +84,7 @@ export default function Header() {
 
           {/* Mobile Menu Button */}
           <button
-            className="md:hidden p-2 -mr-2 text-gray-700 hover:text-primary z-50 relative focus:outline-none min-h-[44px] min-w-[44px] flex items-center justify-center"
+            className="md:hidden p-2 -mr-2 text-gray-200 hover:text-white z-50 relative focus:outline-none min-h-[44px] min-w-[44px] flex items-center justify-center"
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             aria-label={mobileMenuOpen ? "Close menu" : "Open menu"}
             aria-expanded={mobileMenuOpen}
@@ -109,7 +109,7 @@ export default function Header() {
 
         {/* Mobile Menu Overlay */}
         <div 
-          className={`fixed inset-0 bg-white z-40 transform transition-transform duration-300 ease-in-out md:hidden pt-20 px-6 ${
+          className={`fixed inset-0 bg-gray-900 z-40 transform transition-transform duration-300 ease-in-out md:hidden pt-20 px-6 ${
             mobileMenuOpen ? "translate-x-0" : "translate-x-full"
           }`}
         >
@@ -118,7 +118,7 @@ export default function Header() {
               <a
                 key={item.href}
                 href={item.href}
-                className="text-xl font-semibold text-gray-800 hover:text-primary border-b border-gray-100 pb-4"
+                className="text-xl font-semibold text-gray-200 hover:text-white border-b border-gray-700 pb-4"
                 onClick={() => setMobileMenuOpen(false)}
               >
                 {item.label}
