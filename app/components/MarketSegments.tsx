@@ -129,8 +129,8 @@ function SegmentCard({ segment }: { segment: MarketSegmentsProps['marketSegments
       )}
       
       <h3 className="text-xl font-bold text-primary mb-3">{segment.title}</h3>
-      <p className="text-sm text-gray-700 mb-4 leading-relaxed flex-grow">{segment.leadText}</p>
-      <ul className="space-y-2 mt-auto">
+      <p className="text-sm text-gray-700 mb-3 leading-relaxed">{segment.leadText}</p>
+      <ul className="space-y-2">
         {segment.bullets.map((bullet, bulletIndex) => (
           <li key={bulletIndex} className="flex items-start text-sm text-gray-600">
             <span className="text-primary mr-2 flex-shrink-0 mt-1">•</span>
