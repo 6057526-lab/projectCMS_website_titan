@@ -7,7 +7,11 @@ export default function Footer() {
         <div className="flex flex-col md:flex-row justify-between items-center text-center md:text-left gap-6">
           {/* Logo and Description */}
           <div className="max-w-md">
-            <h3 className="text-2xl font-bold text-white mb-2">REEMS</h3>
+            <img
+              src="/reems_logo_white.svg"
+              alt="REEMS"
+              className="h-8 w-auto mb-2 md:h-9"
+            />
             <p className="text-sm text-gray-400 leading-relaxed">
               Race & Engineering Elite Manufacturing Services — Advanced light-alloy solutions for
               high-performance industries.

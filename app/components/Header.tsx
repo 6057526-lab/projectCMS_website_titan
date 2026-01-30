@@ -59,10 +59,14 @@ export default function Header() {
           {/* Logo */}
           <Link 
             href="/" 
-            className="text-2xl font-bold text-primary tracking-tight z-50 relative"
+            className="flex items-center z-50 relative"
             onClick={() => setMobileMenuOpen(false)}
           >
-            REEMS
+            <img
+              src="/reems_logo_black.svg"
+              alt="REEMS"
+              className="h-8 w-auto md:h-9"
+            />
           </Link>
 
           {/* Desktop Menu */}
