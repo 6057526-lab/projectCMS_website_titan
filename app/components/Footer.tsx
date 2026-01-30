@@ -2,13 +2,13 @@ export default function Footer() {
   const currentYear = new Date().getFullYear();
 
   return (
-    <footer className="bg-gray-900 text-gray-300 border-t border-gray-800">
+    <footer className="bg-black text-gray-300 border-t border-gray-800">
       <div className="container-custom py-10 md:py-12">
         <div className="flex flex-col md:flex-row justify-between items-center text-center md:text-left gap-6">
-          {/* Logo and Description */}
+          {/* Logo and Description — dark logo (white on black) in dark theme */}
           <div className="max-w-md">
             <img
-              src="/reems_logo_white.svg"
+              src="/reems_logo_black.svg"
               alt="REEMS"
               className="h-8 w-auto mb-2 md:h-9"
             />
